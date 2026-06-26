@@ -14,10 +14,9 @@ export default function SignupPage() {
   const [error, setError] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
-  const supabase = createClient()
-
   const handleSignup = async () => {
     setError('')
+    const supabase = createClient()
 
     const studentIdRegex = /^[\u4e00-\u9fff]\d{2}-\d{4}$/
     if (!studentIdRegex.test(studentId)) {
