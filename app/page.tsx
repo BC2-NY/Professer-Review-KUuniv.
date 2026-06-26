@@ -80,7 +80,6 @@ export default async function HomePage() {
       {/* ===== NAV ===== */}
       <header className="sticky top-0 z-20 border-b border-[#ECEAF3] bg-white/85 backdrop-blur-md">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-          {/* 1段目：ロゴ ＋ (PC:検索) ＋ ナビ */}
           <div className="flex items-center gap-3 py-3">
             <Link href="/" className="flex flex-none items-center gap-2.5 no-underline">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#8B6BFF,#6A4DE0)] font-heading text-lg font-black text-white">
@@ -91,35 +90,36 @@ export default async function HomePage() {
               </span>
             </Link>
 
-            {/* PC のみ検索 */}
-            <div className="hidden flex-[1_1_260px] sm:block">
+            {/* 検索ボックス：スマホは flex-1 で伸縮、PC は固定幅 */}
+            <div className="flex-1 sm:flex-[1_1_260px]">
               <SearchBar />
             </div>
 
-            <nav className="ml-auto flex flex-none items-center gap-2">
-              {/* ランキングは PC のみ */}
+            <nav className="flex flex-none items-center gap-2">
+              {/* ランキング：PC のみ表示 */}
               <Link
                 href="/ranking"
                 className="hidden h-11 items-center gap-1.5 whitespace-nowrap rounded-xl bg-like-soft px-4 font-heading text-[13.5px] font-bold text-[#E8623F] no-underline transition-colors hover:bg-[#FFE0D4] sm:inline-flex"
               >
                 <span className="text-[15px]">🏆</span> ランキング
               </Link>
+
+              {/* ログイン/ログアウト：スマホはアイコンのみ */}
               {user ? (
                 <LogoutButton />
               ) : (
                 <Link
                   href="/login"
-                  className="inline-flex h-11 items-center whitespace-nowrap rounded-xl bg-[linear-gradient(135deg,#8B6BFF,#7B61FF)] px-[17px] font-heading text-[13.5px] font-bold text-white no-underline shadow-[0_4px_12px_rgba(123,97,255,0.28)] transition-opacity hover:opacity-90"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#8B6BFF,#7B61FF)] text-white no-underline shadow-[0_4px_12px_rgba(123,97,255,0.28)] transition-opacity hover:opacity-90 sm:h-11 sm:w-auto sm:whitespace-nowrap sm:px-[17px] sm:font-heading sm:text-[13.5px] sm:font-bold"
                 >
-                  ログイン
+                  <svg className="sm:hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  <span className="hidden sm:inline">ログイン</span>
                 </Link>
               )}
             </nav>
-          </div>
-
-          {/* 2段目：スマホのみ検索ボックス */}
-          <div className="pb-3 sm:hidden">
-            <SearchBar />
           </div>
         </div>
       </header>
