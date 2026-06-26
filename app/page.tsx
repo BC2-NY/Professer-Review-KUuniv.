@@ -79,39 +79,48 @@ export default async function HomePage() {
     <div className="min-h-screen bg-page font-sans">
       {/* ===== NAV ===== */}
       <header className="sticky top-0 z-20 border-b border-[#ECEAF3] bg-white/85 backdrop-blur-md">
-        <div className="mx-auto flex max-w-[1200px] flex-wrap items-center gap-4 px-6 py-3">
-          <Link href="/" className="flex flex-none items-center gap-2.5 no-underline">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#8B6BFF,#6A4DE0)] font-heading text-lg font-black text-white">
-              関
-            </span>
-            <span className="whitespace-nowrap font-heading text-base font-bold text-ink">
-              関大 教授レビュー
-            </span>
-          </Link>
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+          {/* 1段目：ロゴ ＋ (PC:検索) ＋ ナビ */}
+          <div className="flex items-center gap-3 py-3">
+            <Link href="/" className="flex flex-none items-center gap-2.5 no-underline">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#8B6BFF,#6A4DE0)] font-heading text-lg font-black text-white">
+                関
+              </span>
+              <span className="hidden whitespace-nowrap font-heading text-base font-bold text-ink sm:inline">
+                関大 教授レビュー
+              </span>
+            </Link>
 
-          {/* 常時表示の検索 */}
-          <div className="min-w-[200px] flex-[1_1_260px]">
-            <SearchBar />
+            {/* PC のみ検索 */}
+            <div className="hidden flex-[1_1_260px] sm:block">
+              <SearchBar />
+            </div>
+
+            <nav className="ml-auto flex flex-none items-center gap-2">
+              {/* ランキングは PC のみ */}
+              <Link
+                href="/ranking"
+                className="hidden h-11 items-center gap-1.5 whitespace-nowrap rounded-xl bg-like-soft px-4 font-heading text-[13.5px] font-bold text-[#E8623F] no-underline transition-colors hover:bg-[#FFE0D4] sm:inline-flex"
+              >
+                <span className="text-[15px]">🏆</span> ランキング
+              </Link>
+              {user ? (
+                <LogoutButton />
+              ) : (
+                <Link
+                  href="/login"
+                  className="inline-flex h-11 items-center whitespace-nowrap rounded-xl bg-[linear-gradient(135deg,#8B6BFF,#7B61FF)] px-[17px] font-heading text-[13.5px] font-bold text-white no-underline shadow-[0_4px_12px_rgba(123,97,255,0.28)] transition-opacity hover:opacity-90"
+                >
+                  ログイン
+                </Link>
+              )}
+            </nav>
           </div>
 
-          <nav className="flex flex-none items-center gap-2">
-            <Link
-              href="/ranking"
-              className="inline-flex h-11 items-center gap-1.5 whitespace-nowrap rounded-xl bg-like-soft px-4 font-heading text-[13.5px] font-bold text-[#E8623F] no-underline transition-colors hover:bg-[#FFE0D4]"
-            >
-              <span className="text-[15px]">🏆</span> ランキング
-            </Link>
-            {user ? (
-              <LogoutButton />
-            ) : (
-              <Link
-                href="/login"
-                className="inline-flex h-11 items-center whitespace-nowrap rounded-xl bg-[linear-gradient(135deg,#8B6BFF,#7B61FF)] px-[17px] font-heading text-[13.5px] font-bold text-white no-underline shadow-[0_4px_12px_rgba(123,97,255,0.28)] transition-opacity hover:opacity-90"
-              >
-                ログイン
-              </Link>
-            )}
-          </nav>
+          {/* 2段目：スマホのみ検索ボックス */}
+          <div className="pb-3 sm:hidden">
+            <SearchBar />
+          </div>
         </div>
       </header>
 
@@ -144,6 +153,21 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ===== ランキングバナー（スマホ：全幅 / PC：非表示） ===== */}
+        <Link
+          href="/ranking"
+          className="mt-4 flex items-center justify-between rounded-2xl bg-[linear-gradient(135deg,#FFF0E8,#FFE4D2)] px-5 py-4 no-underline shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md sm:hidden"
+        >
+          <span className="flex items-center gap-2.5">
+            <span className="text-[22px] leading-none">🏆</span>
+            <span className="flex flex-col gap-0.5">
+              <span className="font-heading text-[14px] font-bold text-[#C0501A]">教授ランキング</span>
+              <span className="text-[11.5px] text-[#B07050]">人気・不評の教授をチェック</span>
+            </span>
+          </span>
+          <span className="font-heading text-[13px] font-bold text-[#E8623F]">見る →</span>
+        </Link>
 
         {/* ===== BODY ===== */}
         <div className="mt-6 flex flex-wrap items-start gap-6">
