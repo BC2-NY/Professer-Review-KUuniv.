@@ -2,44 +2,84 @@
 
 import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+
+// 許可する学内メールドメイン（DB側トリガーと必ず一致させる）
+const ALLOWED_DOMAIN_REGEX = /@([a-z0-9-]+\.)*kansai-u\.ac\.jp$/i
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [studentId, setStudentId] = useState('')
   const [error, setError] = useState('')
+  const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
   const supabase = createClient()
 
   const handleSignup = async () => {
     setError('')
-    setLoading(true)
 
     const studentIdRegex = /^[\u4e00-\u9fff]\d{2}-\d{4}$/
     if (!studentIdRegex.test(studentId)) {
       setError('学籍番号の形式が正しくありません（例: 情25-0101）')
-      setLoading(false)
+      return
+    }
+    if (!ALLOWED_DOMAIN_REGEX.test(email.trim())) {
+      setError('関西大学の学内メールアドレス（@kansai-u.ac.jp）で登録してください')
+      return
+    }
+    if (password.length < 8) {
+      setError('パスワードは8文字以上で設定してください')
       return
     }
 
+    setLoading(true)
     const { error: signUpError } = await supabase.auth.signUp({
-      email,
+      email: email.trim(),
       password,
       options: {
+        emailRedirectTo: `${window.location.origin}/auth/confirm`,
         data: { student_id: studentId },
       },
     })
 
     if (signUpError) {
-      setError('登録エラー: ' + signUpError.message)
+      // DBトリガーのドメイン拒否は汎用エラーで返ることが多いので、ドメイン文言で案内
+      if (
+        signUpError.message.includes('allowed_domain_only') ||
+        signUpError.message.toLowerCase().includes('database error')
+      ) {
+        setError('関西大学の学内メールアドレスでのみ登録できます')
+      } else {
+        setError('登録エラー: ' + signUpError.message)
+      }
       setLoading(false)
       return
     }
 
-    router.push('/')
+    setLoading(false)
+    setSent(true)
+  }
+
+  // 確認メール送信後の案内
+  if (sent) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="bg-white p-8 rounded-xl shadow-sm w-full max-w-sm text-center">
+          <h1 className="text-xl font-bold mb-3">確認メールを送りました</h1>
+          <p className="text-sm text-gray-600 leading-relaxed">
+            <span className="font-bold">{email}</span> 宛に確認メールを送信しました。
+            メール内のリンクを開くと登録が完了し、ログインできます。
+          </p>
+          <Link
+            href="/login"
+            className="mt-6 inline-block text-sm text-blue-500"
+          >
+            ログイン画面へ
+          </Link>
+        </div>
+      </main>
+    )
   }
 
   return (
@@ -60,7 +100,7 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="text-sm text-gray-600 mb-1 block">メールアドレス</label>
+            <label className="text-sm text-gray-600 mb-1 block">学内メールアドレス</label>
             <input
               type="email"
               placeholder="example@kansai-u.ac.jp"
@@ -81,9 +121,7 @@ export default function SignupPage() {
             />
           </div>
 
-          {error && (
-            <p className="text-red-500 text-sm">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             onClick={handleSignup}
@@ -95,7 +133,9 @@ export default function SignupPage() {
 
           <p className="text-center text-sm text-gray-500">
             アカウントをお持ちの方は
-            <Link href="/login" className="text-blue-500 ml-1">ログイン</Link>
+            <Link href="/login" className="text-blue-500 ml-1">
+              ログイン
+            </Link>
           </p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 'use client'
 // app/professors/[id]/CommentSection.tsx — Client Component
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 
@@ -27,6 +27,19 @@ export default function CommentSection({
   const [comments, setComments] = useState<Comment[]>(initialComments)
   const [draft, setDraft] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [highlightId, setHighlightId] = useState<string | null>(null)
+
+  // URLの #comment-<id> に該当するコメントへスクロール＆一時ハイライト
+  useEffect(() => {
+    const m = window.location.hash.match(/^#comment-(.+)$/)
+    if (!m) return
+    const el = document.getElementById(`comment-${m[1]}`)
+    if (!el) return
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    setHighlightId(m[1])
+    const t = setTimeout(() => setHighlightId(null), 2200)
+    return () => clearTimeout(t)
+  }, [])
 
   const canPost = draft.trim().length > 0 && !submitting
 
@@ -132,7 +145,15 @@ export default function CommentSection({
       {/* 一覧 */}
       <div className="mt-[18px] flex flex-col gap-3.5">
         {comments.map((c) => (
-          <div key={c.id} className="rounded-[18px] bg-[#F8F7FC] px-4 py-[15px]">
+          <div
+            key={c.id}
+            id={`comment-${c.id}`}
+            className={`scroll-mt-24 rounded-[18px] px-4 py-[15px] transition-colors duration-500 ${
+              highlightId === c.id
+                ? 'bg-brand-soft ring-2 ring-[#C9BCFF]'
+                : 'bg-[#F8F7FC]'
+            }`}
+          >
             <p className="text-[13.5px] leading-[1.7] text-[#3A3852]">{c.body}</p>
             <div className="mt-2.5 flex items-center justify-between">
               <span className="flex items-center gap-1.5 text-[11px] text-[#A8A6BA]">

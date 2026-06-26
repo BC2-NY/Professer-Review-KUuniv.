@@ -18,17 +18,26 @@ export default function LoginPage() {
     setLoading(true)
 
     const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
+      email: email.trim(),
       password,
     })
 
     if (signInError) {
-      setError('メールアドレスまたはパスワードが正しくありません')
+      // メール未確認を区別して案内
+      if (
+        signInError.code === 'email_not_confirmed' ||
+        signInError.message.toLowerCase().includes('not confirmed')
+      ) {
+        setError('メールアドレスが未確認です。確認メールのリンクを開いてから再度ログインしてください。')
+      } else {
+        setError('メールアドレスまたはパスワードが正しくありません')
+      }
       setLoading(false)
       return
     }
 
     router.push('/')
+    router.refresh() // サーバーコンポーネントにログイン状態を反映
   }
 
   return (
@@ -38,7 +47,7 @@ export default function LoginPage() {
 
         <div className="flex flex-col gap-4">
           <div>
-            <label className="text-sm text-gray-600 mb-1 block">メールアドレス</label>
+            <label className="text-sm text-gray-600 mb-1 block">学内メールアドレス</label>
             <input
               type="email"
               placeholder="example@kansai-u.ac.jp"
@@ -59,9 +68,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {error && (
-            <p className="text-red-500 text-sm">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             onClick={handleLogin}
@@ -73,7 +80,9 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-gray-500">
             アカウントをお持ちでない方は
-            <Link href="/signup" className="text-blue-500 ml-1">新規登録</Link>
+            <Link href="/signup" className="text-blue-500 ml-1">
+              新規登録
+            </Link>
           </p>
         </div>
       </div>
