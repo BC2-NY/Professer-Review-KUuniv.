@@ -1,6 +1,7 @@
 ﻿// app/page.tsx — Server Component（トップページ web版 / レスポンシブ）
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
+import SearchBar from './SearchBar'
 import LogoutButton from './LogoutButton'
 
 // 学部アイコンの色（並び順 index で自動割当）
@@ -158,6 +159,11 @@ export default async function HomePage() {
           </span>
           <span className="font-heading text-[13px] font-bold text-[#E8623F]">見る →</span>
         </Link>
+
+        {/* ===== 検索バー（スマホのみ） ===== */}
+        <div className="mt-4 sm:hidden">
+          <SearchBar />
+        </div>
 
         {/* ===== BODY ===== */}
         <div className="mt-6 flex flex-wrap items-start gap-6">
