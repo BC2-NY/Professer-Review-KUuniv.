@@ -125,9 +125,9 @@ export default async function HomePage() {
               関西大学の学生だけの口コミ
             </span>
             <h1 className="mb-2 mt-3 font-heading text-[26px] font-bold leading-[1.35] text-white sm:mb-2.5 sm:mt-[18px] sm:text-[38px]">
-              学部を選んで、
+              学生のリアルな声を
               <br />
-              教授を見つけよう。
+              見てみよう。
             </h1>
             <p className="mb-5 text-[13.5px] leading-[1.7] text-white/[0.82] sm:mb-[26px] sm:text-[15px]">
               在学生のリアルな声で、履修登録の参考に。好き・嫌いの割合と講義の感想がひと目で分かります。
