@@ -117,28 +117,28 @@ export default async function HomePage() {
 
       <main className="mx-auto max-w-[1200px] px-6 py-6">
         {/* ===== HERO ===== */}
-        <section className="relative overflow-hidden rounded-[32px] bg-[linear-gradient(135deg,#7E64FF_0%,#6A4DE0_100%)] px-10 py-12 shadow-[0_18px_44px_rgba(106,77,224,0.30)]">
+        <section className="relative overflow-hidden rounded-[24px] bg-[linear-gradient(135deg,#7E64FF_0%,#6A4DE0_100%)] px-5 py-8 shadow-[0_18px_44px_rgba(106,77,224,0.30)] sm:rounded-[32px] sm:px-10 sm:py-12">
           <div className="absolute -right-10 -top-16 h-60 w-60 rounded-full bg-white/[0.08]" />
           <div className="absolute -bottom-24 right-32 h-44 w-44 rounded-full bg-white/[0.06]" />
           <div className="relative max-w-[560px]">
-            <span className="inline-block rounded-full bg-white/[0.16] px-3.5 py-1.5 text-xs font-bold tracking-wide text-white">
+            <span className="inline-block rounded-full bg-white/[0.16] px-3 py-1 text-[11px] font-bold tracking-wide text-white sm:px-3.5 sm:py-1.5 sm:text-xs">
               関西大学の学生だけの口コミ
             </span>
-            <h1 className="mb-2.5 mt-[18px] font-heading text-[38px] font-bold leading-[1.35] text-white">
+            <h1 className="mb-2 mt-3 font-heading text-[26px] font-bold leading-[1.35] text-white sm:mb-2.5 sm:mt-[18px] sm:text-[38px]">
               学部を選んで、
               <br />
               教授を見つけよう。
             </h1>
-            <p className="mb-[26px] text-[15px] leading-[1.7] text-white/[0.82]">
+            <p className="mb-5 text-[13.5px] leading-[1.7] text-white/[0.82] sm:mb-[26px] sm:text-[15px]">
               在学生のリアルな声で、履修登録の参考に。好き・嫌いの割合と講義の感想がひと目で分かります。
             </p>
-            <div className="flex flex-wrap gap-7">
+            <div className="flex flex-wrap gap-5 sm:gap-7">
               {stats.map((s) => (
                 <div key={s.label} className="flex flex-col gap-0.5">
-                  <span className="font-heading text-[30px] font-black leading-none text-white">
+                  <span className="font-heading text-[22px] font-black leading-none text-white sm:text-[30px]">
                     {s.value}
                   </span>
-                  <span className="text-[12.5px] text-white/75">{s.label}</span>
+                  <span className="text-[11.5px] text-white/75 sm:text-[12.5px]">{s.label}</span>
                 </div>
               ))}
             </div>
