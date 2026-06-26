@@ -93,14 +93,14 @@ export default async function ProfessorPage({
   //   ・「/」があれば末尾（中区分）だけ採用 → "情報通信 /" の重複を防ぐ
   //   ・Set で重複除去
   // 「行政学」のような単独表記はそのまま1チップになる。
-  const fields = [
+  const fields: string[] = [
     ...new Set(
       (professor.research_field ?? '')
         .split('、')
         .map((s: string) => s.split('/').pop()!.trim())
         .filter(Boolean),
     ),
-  ]
+  ] as string[]
 
   return (
     <main className="min-h-screen bg-page font-sans">
